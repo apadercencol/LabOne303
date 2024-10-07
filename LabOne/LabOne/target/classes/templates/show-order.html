@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Order Details</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome, <span th:text="${order.firstName} + ' ' + ${order.middleName != null && !order.middleName.isEmpty() ? order.middleName + ' ' : ''} + ${order.lastName}"></span>.</h1>
+        <h2>Your Order Details are as follows:</h2>
+
+        <p>Email Address: <span th:text="${order.email}"></span></p>
+        <p>Phone Number: (<span th:text="${order.areaCode}"></span>) <span th:text="${order.phoneNumber}"></span></p>
+
+        <p>Address: <span th:text="${order.streetAddress}"></span>, 
+                    <span th:text="${order.city}"></span>, 
+                    <span th:text="${order.state}"></span>, 
+                    <span th:text="${order.zip}"></span>, 
+                    <span th:text="${order.country}"></span>
+        </p>
+
+        <p><span th:text="${order.streetAddress2 != null && !order.streetAddress2.isEmpty() ? order.streetAddress2 : 'No Street Address Line 2'}"></span></p>
+
+        <h3>Phone Details</h3>
+        <div class="phone-details-container">
+            <table>
+                <tr>
+                    <th class="left-column">Phone Brand</th>
+                    <td class="right-column"><span th:text="${order.brand}"></span></td>
+                </tr>
+                <tr>
+                    <th class="left-column">Phone Model</th>
+                    <td class="right-column"><span th:text="${order.model}"></span></td>
+                </tr>
+                <tr>
+                    <th class="left-column">Product #</th>
+                    <td class="right-column"><span th:text="${order.productNumber}"></span></td>
+                </tr>
+                <tr>
+                    <th class="left-column">Phone Price</th>
+                    <td class="right-column">CAD <span th:text="${order.price}"></span></td>
+                </tr>
+                <tr>
+                    <th class="left-column">Quantity</th>
+                    <td class="right-column"><span th:text="${order.quantity}"></span></td>
+                </tr>
+                <tr>
+                    <th class="left-column">Total</th>
+                    <td class="right-column">CAD <span th:text="${order.calculateTotal()}"></span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <title>Profile</title>
+</head>
+<body>
+    <h1>Profile</h1>
+    <form action="/updateProfile" method="post">
+        <input type="hidden" name="studentId" th:value="${student.studentID}"/>
+        <p>Address: <input type="text" name="address" th:value="${student.address}" /></p>
+        <p>City: <input type="text" name="city" th:value="${student.city}" /></p>
+        <p>Postal Code: <input type="text" name="postalCode" th:value="${student.postalCode}" /></p>
+        <p>Technical Skills: <input type="text" name="technicalSkills" th:value="${student.technicalSkills}" /></p>
+        <p><button type="submit">Update</button></p>
+    </form>
+    <a th:href="@{/home(studentId=${student.studentID})}">
+        <button>Back to Home</button>
+    </a>
+</body>
+</html>

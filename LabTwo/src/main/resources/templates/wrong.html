@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <meta charset="UTF-8">
+    <title>Login Error</title>
+    <style>
+        /* Basic styling for the message */
+        .container {
+            text-align: center;
+            margin-top: 50px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Invalid username or password</h2>
+        <p>The username or password you entered is incorrect, or the user does not exist.</p>
+        <form action="/" method="get">
+            <button type="submit">Back to Login</button>
+        </form>
+    </div>
+</body>
+</html>

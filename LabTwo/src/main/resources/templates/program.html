@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <title>Program Selection</title>
+    <script>
+        function toggleCreditCardSection() {
+            const programSelected = document.querySelector('input[name="program"]:checked');
+            const creditCardSection = document.getElementById("creditCardSection");
+            const enrollButton = document.getElementById("enrollButton");
+
+            if (programSelected) {
+                creditCardSection.style.display = "block";
+                enrollButton.disabled = true;
+            } else {
+                creditCardSection.style.display = "none";
+                enrollButton.disabled = true;
+            }
+        }
+
+        function validateAmount() {
+            const programSelected = document.querySelector('input[name="program"]:checked');
+            const amount = parseFloat(document.getElementById("amount").value);
+            const enrollButton = document.getElementById("enrollButton");
+            const message = document.getElementById("message");
+
+            if (!programSelected) return;
+
+            const programAmount = programSelected.value === "SE01" ? 1050.00 : 893.00;
+
+            if (amount === programAmount) {
+                message.textContent = "";
+                enrollButton.disabled = false;
+            } else {
+                message.textContent = "Exact amount only.";
+                enrollButton.disabled = true;
+            }
+        }
+
+        function validateCardNumber(input) {
+            if (input.value.length > 12) {
+                input.value = input.value.slice(0, 12);
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Select a Program</h1>
+
+    <!-- Display the studentId -->
+    <p>Student ID: <span th:text="${studentId}"></span></p>
+
+    <form action="/enroll" method="post">
+        <input type="hidden" name="studentId" th:value="${studentId}" />
+        <label>
+            <input type="radio" name="program" value="SE01" onclick="toggleCreditCardSection()" /> SE01 | Software Engineering Technology | 3 Hours | 1050.00 | Dr. Johnson 
+        </label><br/>
+        <label>
+            <input type="radio" name="program" value="GD01" onclick="toggleCreditCardSection()" />GD01 | Game Development | 4 Hours | 893.00 | Dr. Smith 
+        </label><br/>
+
+        <!-- Credit card section -->
+        <div id="creditCardSection" style="display:none;">
+            <h3>Credit Card Information</h3>
+            <label for="cardNumber">Card Number:</label>
+            <input type="text" id="cardNumber" name="cardNumber" maxlength="12" oninput="validateCardNumber(this)" required /><br/>
+
+            <label for="cardHolder">Card Holder Name:</label>
+            <input type="text" id="cardHolder" name="cardHolder" required /><br/>
+
+            <label for="expiration">Expiration Date (MM/YY):</label>
+            <input type="text" id="expiration" name="expiration" placeholder="MM/YY" required /><br/>
+
+            <label for="cvv">CVV:</label>
+            <input type="text" id="cvv" name="cvv" maxlength="3" required /><br/>
+
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" name="amount" oninput="validateAmount()" required /><br/>
+
+            <p id="message" style="color: red;"></p>
+        </div>
+
+        <button type="submit" id="enrollButton" disabled>Enroll</button>
+    </form>
+
+    <a th:href="@{/home(studentId=${studentId})}">
+        <button>Back to Home</button>
+    </a>
+</body>
+</html>

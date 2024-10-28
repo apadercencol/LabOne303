@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <title>Enrolled</title>
+</head>
+<body>
+    <h1>Enrollment Successful</h1>
+    <p>You have successfully enrolled in the selected program.</p>
+    <a th:href="@{/home(studentId=${student.studentID})}">
+        <button>Back to Home</button>
+    </a>
+</body>
+</html>

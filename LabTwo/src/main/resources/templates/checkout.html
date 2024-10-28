@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <title>Checkout</title>
+</head>
+<body>
+    <h1>Checkout</h1>
+    <div th:if="${selectedProgram != null}">
+        <p>Program: <span th:text="${selectedProgram.programName}"></span></p>
+        <p>Duration: <span th:text="${selectedProgram.duration}"></span> years</p>
+        <p>Fee: $<span th:text="${selectedProgram.fee}"></span></p>
+        <p>Professor: <span th:text="${selectedProgram.professor}"></span></p>
+    </div>
+    
+    <!-- Pay now and enroll button -->
+    <form action="#" method="post">
+        <button type="submit">Pay now and enroll</button>
+    </form>
+    
+    <a href="/home"><button>Back to Home</button></a>
+</body>
+</html>

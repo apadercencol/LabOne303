@@ -1,0 +1,32 @@
+/* Set a more appealing font and white font color */
+body {
+    font-family: Arial, Helvetica, sans-serif; /* Choose a font stack that looks good */
+    background: linear-gradient(to right, yellowgreen,seashell, khaki); /* Three-color gradient */
+    color: olive; /* White font color */
+    text-align: center; /* Center all text */
+}
+
+/* Style for spacing text boxes and text */
+input[type="text"], input[type="password"], textarea {
+    margin: 10px 0; /* Space above and below */
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 40%; /* Adjust width as needed */
+}
+
+/* Style for buttons */
+button {
+    background-color: #4CAF50; /* Green background */
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px; /* Space above buttons */
+}
+
+/* Change button hover effect */
+button:hover {
+    background-color: #45a049; /* Slightly darker green on hover */
+}

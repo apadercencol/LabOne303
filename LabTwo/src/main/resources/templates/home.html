@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <title>Home</title>
+</head>
+<body>
+    <h1>Welcome, <span th:text="${student.firstName}"></span>!</h1>
+    <a th:href="@{/profile(studentId=${student.studentID})}">
+        <button>Profile</button>
+    </a>
+    <a th:href="@{/program(studentId=${student.studentID})}">
+        <button>Choose Program</button>
+    </a>
+</body>
+</html>

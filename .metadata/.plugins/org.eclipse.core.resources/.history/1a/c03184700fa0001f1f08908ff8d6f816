@@ -1,0 +1,46 @@
+package com.example.demo;
+
+import com.example.demo.Seeker;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class SeekerServices {
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    // Retrieve all seekers
+    public List<Seeker> getAllSeekers() {
+        return entityManager.createQuery("SELECT s FROM Seeker s", Seeker.class).getResultList();
+    }
+
+    // Find seekers by blood group
+    public List<Seeker> findSeekersByBloodGroup(String bloodGroup) {
+        return entityManager.createQuery("SELECT s FROM Seeker s WHERE s.bloodGroup = :bloodGroup", Seeker.class)
+                .setParameter("bloodGroup", bloodGroup)
+                .getResultList();
+    }
+
+    // Save a new seeker
+    @Transactional
+    public void saveSeeker(Seeker seeker) {
+        entityManager.persist(seeker);
+    }
+
+    // Update a seeker
+    @Transactional
+    public void updateSeeker(Seeker seeker) {
+        entityManager.merge(seeker);
+    }
+
+    // Delete a seeker
+    @Transactional
+    public void deleteSeeker(Seeker seeker) {
+        entityManager.remove(entityManager.contains(seeker) ? seeker : entityManager.merge(seeker));
+    }
+}

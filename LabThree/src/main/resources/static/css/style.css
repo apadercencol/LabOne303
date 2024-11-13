@@ -1,0 +1,81 @@
+/* style.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom right, yellowgreen, wheat, seashell); /* Three-color gradient */
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.container {
+    text-align: center;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto; /* Center container horizontally */
+    padding: 20px;
+    background-color: transparent; /* Transparent to allow seamless background */
+    border-radius: 0;
+    box-shadow: none; /* Remove box-shadow to avoid sectioning */
+}
+
+h1 {
+    text-align: center;
+    font-size: 2.5em;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+    text-align: left;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+input[type="text"], input[type="number"], input[type="date"], input[type="email"], button {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: yellowgreen;
+    color: white;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #9acd32;
+}
+
+.view-button {
+    margin-top: 20px;
+    display: block;
+    text-align: center;
+}
+
+hr {
+    margin: 40px 0;
+    border: 0;
+    border-top: 2px solid #ccc;
+}

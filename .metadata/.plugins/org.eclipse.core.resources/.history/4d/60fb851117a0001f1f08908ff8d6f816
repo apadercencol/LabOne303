@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seeker List</title>
+</head>
+<body>
+    <h1>Seeker Records</h1>
+    <table border="1">
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Age</th>
+            <th>Blood Group</th>
+            <th>City</th>
+            <th>Phone</th>
+            <th>Actions</th>
+        </tr>
+        <tr th:each="seeker : ${seekers}">
+            <td th:text="${seeker.firstName}"></td>
+            <td th:text="${seeker.lastName}"></td>
+            <td th:text="${seeker.age}"></td>
+            <td th:text="${seeker.bloodGroup}"></td>
+            <td th:text="${seeker.city}"></td>
+            <td th:text="${seeker.phone}"></td>
+            <td>
+                <!-- Delete Button -->
+                <form th:action="@{/seekers/delete}" method="post" style="display:inline;">
+                    <input type="hidden" name="firstName" th:value="${seeker.firstName}"/>
+                    <input type="hidden" name="lastName" th:value="${seeker.lastName}"/>
+                    <button type="submit">Delete</button>
+                </form>
+
+                <!-- Update Button -->
+                <form th:action="@{/seekers/update}" method="get" style="display:inline;">
+                    <input type="hidden" name="firstName" th:value="${seeker.firstName}"/>
+                    <input type="hidden" name="lastName" th:value="${seeker.lastName}"/>
+                    <button type="submit">Update</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Return to Home button -->
+    <br><br>
+    <a href="/seekers/all"><button>Return to Home</button></a>
+</body>
+</html>

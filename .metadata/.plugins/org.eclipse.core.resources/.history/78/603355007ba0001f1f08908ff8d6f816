@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Seeker</title>
+</head>
+<body>
+    <h1>Update Seeker</h1>
+    <form th:action="@{/seekers/update}" method="post">
+        
+        <!-- Hidden fields to pass the original first and last names -->
+        <input type="hidden" name="originalFirstName" th:value="${seeker.firstName}"/>
+        <input type="hidden" name="originalLastName" th:value="${seeker.lastName}"/>
+
+        <label>First Name:</label>
+        <input type="text" name="firstName" th:value="${seeker.firstName}" required/><br>
+
+        <label>Last Name:</label>
+        <input type="text" name="lastName" th:value="${seeker.lastName}" required/><br>
+        
+        <label>Age:</label>
+        <input type="number" name="age" th:value="${seeker.age}" required/><br>
+
+        <label>Blood Group:</label>
+        <input type="text" name="bloodGroup" th:value="${seeker.bloodGroup}" required/><br>
+
+        <label>City:</label>
+        <input type="text" name="city" th:value="${seeker.city}" required/><br>
+
+        <label>Phone:</label>
+        <input type="text" name="phone" th:value="${seeker.phone}" required/><br>
+
+        <button type="submit">Update</button>
+    </form>
+
+    <!-- Return to Home button -->
+    <br><br>
+    <a href="/"><button>Return to Home</button></a>
+</body>
+</html>

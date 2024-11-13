@@ -1,0 +1,92 @@
+/* style.css */
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: Arial, sans-serif; /* Or another appealing font */
+    background: linear-gradient(to bottom right, olive, yellowgreen, wheat, seashell); /* Four-color gradient */
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.container {
+    text-align: center;
+    width: 90%;
+    max-width: 1200px;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background for readability */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+    text-align: center;
+    font-size: 2.5em;
+    color: #333;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+h2 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.section {
+    display: inline-block;
+    width: 30%;
+    vertical-align: top;
+    padding: 0 10px;
+    text-align: left; /* Align labels to the left */
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+input[type="text"], input[type="number"], input[type="date"], input[type="email"], button {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: yellowgreen;
+    color: white;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #9acd32;
+}
+
+.view-button {
+    margin-top: 20px;
+    display: block;
+    text-align: center;
+}
+
+hr {
+    margin: 40px 0;
+    border: 0;
+    border-top: 2px solid #ccc;
+}

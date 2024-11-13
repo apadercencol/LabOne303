@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update BloodStock</title>
+</head>
+<body>
+    <h1>Update BloodStock</h1>
+    <form th:action="@{/bloodstocks/update}" method="post">
+
+        <!-- Hidden fields to pass the original bloodGroup and bestBefore -->
+        <input type="hidden" name="originalBloodGroup" th:value="${bloodStock.bloodGroup}"/>
+        <input type="hidden" name="originalBestBefore" th:value="${bloodStock.bestBefore}"/>
+
+        <label>Blood Group:</label>
+        <input type="text" name="bloodGroup" th:value="${bloodStock.bloodGroup}" required/><br>
+
+        <label>Quantity:</label>
+        <input type="number" name="quantity" th:value="${bloodStock.quantity}" required/><br>
+
+        <label>Best Before:</label>
+        <input type="date" name="bestBefore" th:value="${bloodStock.bestBefore}" required/><br>
+
+        <label>Status:</label>
+        <input type="text" name="status" th:value="${bloodStock.status}" required/><br>
+
+        <button type="submit">Update BloodStock</button>
+    </form>
+
+    <!-- Return to Home button -->
+    <br><br>
+    <a href="/"><button>Return to Home</button></a>
+</body>
+</html>

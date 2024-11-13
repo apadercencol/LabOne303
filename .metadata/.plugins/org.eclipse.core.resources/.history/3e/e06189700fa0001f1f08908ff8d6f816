@@ -1,0 +1,89 @@
+package com.example.demo;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+
+@Entity
+public class Seeker {
+
+    @Column(name = "firstname")
+    private String firstName;
+
+    @Column(name = "lastname")
+    private String lastName;
+
+    @Column(name = "age")
+    private Integer age;
+
+    @Column(name = "bloodgroup")
+    private String bloodGroup;
+
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "phone")
+    private String phone;
+
+    // Default constructor
+    public Seeker() {
+    }
+
+    // Constructor with all fields
+    public Seeker(String firstName, String lastName, Integer age, String bloodGroup, String city, String phone) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.bloodGroup = bloodGroup;
+        this.city = city;
+        this.phone = phone;
+    }
+
+    // Getters and Setters
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public String getBloodGroup() {
+        return bloodGroup;
+    }
+
+    public void setBloodGroup(String bloodGroup) {
+        this.bloodGroup = bloodGroup;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+}

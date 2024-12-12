@@ -1,0 +1,51 @@
+package com.example.login;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/api/donors")
+@CrossOrigin(origins = "http://localhost:3000")
+public class DonorController {
+
+    @Autowired
+    private DonorRepository donorRepository;
+
+    @PostMapping("/login")
+    public ResponseEntity<String> loginDonor(@RequestBody Donor loginRequest) {
+        // Log the login request
+        System.out.println("Login request received for userName: " + loginRequest.getUserName());
+
+        // Backend validation for userName
+        if (loginRequest.getUserName() == null || loginRequest.getUserName().trim().isEmpty()) {
+            System.out.println("Validation failed: Username is required.");
+            return ResponseEntity.badRequest().body("Username is required.");
+        }
+
+        // Backend validation for password
+        if (loginRequest.getPassword() == null || loginRequest.getPassword().trim().isEmpty()) {
+            System.out.println("Validation failed: Password is required.");
+            return ResponseEntity.badRequest().body("Password is required.");
+        }
+
+        // Fetch the donor from the repository
+        Optional<Donor> donor = donorRepository.findByUserName(loginRequest.getUserName());
+
+        if (donor.isPresent()) {
+            System.out.println("Donor found: " + donor.get().getUserName());
+            if (donor.get().getPassword().equals(loginRequest.getPassword())) {
+                System.out.println("Password matches for user: " + loginRequest.getUserName());
+                return ResponseEntity.ok("Login successful!");
+            } else {
+                System.out.println("Password mismatch for user: " + loginRequest.getUserName());
+                return ResponseEntity.status(401).body("Invalid username or password.");
+            }
+        } else {
+            System.out.println("No donor found for userName: " + loginRequest.getUserName());
+            return ResponseEntity.status(401).body("Invalid username or password.");
+        }
+    }
+}

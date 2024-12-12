@@ -1,0 +1,71 @@
+package com.example.login;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/api/donors")
+@CrossOrigin(origins = "http://localhost:3000")
+public class DonorController {
+
+    @Autowired
+    private DonorRepository donorRepository;
+
+    // Login endpoint
+    @PostMapping("/login")
+    public ResponseEntity<String> loginDonor(@RequestBody Donor loginRequest) {
+        System.out.println("Login request received for userName: " + loginRequest.getUserName());
+        Optional<Donor> donor = donorRepository.findByUserName(loginRequest.getUserName());
+
+        if (donor.isPresent()) {
+            System.out.println("Donor found: " + donor.get().getUserName());
+            if (donor.get().getPassword().equals(loginRequest.getPassword())) {
+                System.out.println("Password matches for user: " + loginRequest.getUserName());
+                return ResponseEntity.ok("Login successful!");
+            } else {
+                System.out.println("Password mismatch for user: " + loginRequest.getUserName());
+                return ResponseEntity.status(401).body("Invalid username or password.");
+            }
+        } else {
+            System.out.println("No donor found for userName: " + loginRequest.getUserName());
+            return ResponseEntity.status(401).body("Invalid username or password.");
+        }
+    }
+
+    // Registration endpoint
+    @PostMapping("/register")
+    public ResponseEntity<String> registerDonor(@RequestBody Donor donorRequest) {
+        System.out.println("Registration request received for userName: " + donorRequest.getUserName());
+
+        // Validate mandatory fields
+        if (donorRequest.getUserName() == null || donorRequest.getUserName().trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("Username is required.");
+        }
+        if (donorRequest.getPassword() == null || donorRequest.getPassword().trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("Password is required.");
+        }
+        if (donorRequest.getFirstname() == null || donorRequest.getFirstname().trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("First name is required.");
+        }
+        if (donorRequest.getLastname() == null || donorRequest.getLastname().trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("Last name is required.");
+        }
+        if (donorRequest.getPhone() == null || donorRequest.getPhone().trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("Phone number is required.");
+        }
+
+        // Check if username already exists
+        Optional<Donor> existingDonor = donorRepository.findByUserName(donorRequest.getUserName());
+        if (existingDonor.isPresent()) {
+            return ResponseEntity.badRequest().body("Username already exists.");
+        }
+
+        // Save donor to database
+        donorRepository.save(donorRequest);
+        System.out.println("Donor registered: " + donorRequest.getUserName());
+        return ResponseEntity.ok("Registration successful!");
+    }
+}

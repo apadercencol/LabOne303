@@ -1,0 +1,37 @@
+package com.example.login;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/api/donors")
+@CrossOrigin(origins = "http://localhost:3000")
+public class DonorController {
+
+    @Autowired
+    private DonorRepository donorRepository;
+
+    @PostMapping("/login")
+    public ResponseEntity<String> loginDonor(@RequestBody Donor loginRequest) {
+        System.out.println("Login request received for userName: " + loginRequest.getUserName());
+        Optional<Donor> donor = donorRepository.findByUserName(loginRequest.getUserName());
+
+        if (donor.isPresent()) {
+            System.out.println("Donor found: " + donor.get().getUserName());
+            if (donor.get().getPassword().equals(loginRequest.getPassword())) {
+                System.out.println("Password matches for user: " + loginRequest.getUserName());
+                return ResponseEntity.ok("Login successful!");
+            } else {
+                System.out.println("Password mismatch for user: " + loginRequest.getUserName());
+            }
+        } else {
+            System.out.println("No donor found for userName: " + loginRequest.getUserName());
+        }
+
+        return ResponseEntity.status(401).body("Invalid username or password.");
+    }
+
+}

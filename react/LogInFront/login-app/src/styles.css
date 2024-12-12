@@ -1,0 +1,7 @@
+/* styles.css */
+body {
+    background: linear-gradient(to bottom, limegreen, wheat, white);
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+    font-family: Arial, sans-serif; /* Set a default font for the app */
+}

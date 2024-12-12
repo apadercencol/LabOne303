@@ -1,0 +1,116 @@
+package com.example.login;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/api/donors")
+@CrossOrigin(origins = "http://localhost:3000")
+public class DonorController {
+
+    @Autowired
+    private DonorRepository donorRepository;
+
+    // Login endpoint
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, String>> loginDonor(@RequestBody Donor loginRequest) {
+        System.out.println("Login request received for userName: " + loginRequest.getUserName());
+        Optional<Donor> donor = donorRepository.findByUserName(loginRequest.getUserName());
+
+        if (donor.isPresent() && donor.get().getPassword().equals(loginRequest.getPassword())) {
+            System.out.println("Login successful for user: " + loginRequest.getUserName());
+            
+            // Prepare the response with a redirect URL
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Login successful!");
+            response.put("redirect", "/home");
+            
+            return ResponseEntity.ok(response);
+        } else {
+            System.out.println("Invalid credentials for user: " + loginRequest.getUserName());
+            return ResponseEntity.status(401)
+                .body(Collections.singletonMap("error", "Invalid username or password."));
+        }
+    }
+
+    // Registration endpoint
+    @PostMapping("/register")
+    public ResponseEntity<String> registerDonor(@RequestBody Donor donorRequest) {
+        System.out.println("Registration request received for userName: " + donorRequest.getUserName());
+
+        if (donorRequest.getUserName() == null || donorRequest.getUserName().trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("Username is required.");
+        }
+
+        if (donorRequest.getPassword() == null || donorRequest.getPassword().trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("Password is required.");
+        }
+
+        if (donorRepository.findByUserName(donorRequest.getUserName()).isPresent()) {
+            return ResponseEntity.status(409).body("Username is already taken.");
+        }
+
+        donorRepository.save(donorRequest);
+        return ResponseEntity.ok("Registration successful!");
+    }
+ // Add these methods to your DonorController
+
+    @GetMapping("/profile/{userName}")
+    public ResponseEntity<Donor> getDonorProfile(@PathVariable String userName) {
+        Optional<Donor> donor = donorRepository.findByUserName(userName);
+        if (donor.isPresent()) {
+            return ResponseEntity.ok(donor.get());
+        } else {
+            return ResponseEntity.status(404).body(null);
+        }
+    }
+
+    @PutMapping("/profile/{userName}")
+    public ResponseEntity<String> updateDonorProfile(
+        @PathVariable String userName, 
+        @RequestBody Donor updatedDonor
+    ) {
+        Optional<Donor> donor = donorRepository.findByUserName(userName);
+        if (donor.isPresent()) {
+            Donor existingDonor = donor.get();
+            
+            // Update fields (except userName and password)
+            existingDonor.setFirstname(updatedDonor.getFirstname());
+            existingDonor.setLastname(updatedDonor.getLastname());
+            existingDonor.setPhone(updatedDonor.getPhone());
+            existingDonor.setAge_or_dob(updatedDonor.getAge_or_dob());
+            existingDonor.setGender(updatedDonor.getGender());
+            existingDonor.setBloodgroup(updatedDonor.getBloodgroup());
+            existingDonor.setCity(updatedDonor.getCity());
+            existingDonor.setLast_donation(updatedDonor.getLast_donation());
+            existingDonor.setScheduled_donation(updatedDonor.getScheduled_donation());
+            existingDonor.setBloodBank(updatedDonor.getBloodBank());
+
+            donorRepository.save(existingDonor);
+            return ResponseEntity.ok("Profile updated successfully!");
+        } else {
+            return ResponseEntity.status(404).body("Donor not found!");
+        }
+    }
+    @PutMapping("/api/donors/update")
+    public ResponseEntity<String> updateDonor(@RequestBody Donor updatedDonor) {
+        Optional<Donor> donorOpt = donorRepository.findById(updatedDonor.getDonorid());
+        if (donorOpt.isPresent()) {
+            donorRepository.save(updatedDonor);
+            return ResponseEntity.ok("Donor updated successfully.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Donor not found.");
+        }
+    }
+
+    
+    
+    
+    
+}

@@ -1,0 +1,21 @@
+package com.example.login;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/bloodbanks")
+@CrossOrigin(origins = "http://localhost:3000")
+public class BloodBankController {
+
+    @Autowired
+    private BloodBankRepository bloodBankRepository;
+
+    // Endpoint to fetch all blood bank records
+    @GetMapping
+    public List<BloodBank> getAllBloodBanks() {
+        return bloodBankRepository.findAll();
+    }
+}

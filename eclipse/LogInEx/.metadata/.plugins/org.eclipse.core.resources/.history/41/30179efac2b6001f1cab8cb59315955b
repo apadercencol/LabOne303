@@ -1,0 +1,140 @@
+package com.example.login;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/api/donors")
+@CrossOrigin(origins = "http://localhost:3000")
+public class DonorController {
+
+    @Autowired
+    private DonorRepository donorRepository;
+
+    @Autowired
+    private BloodBankRepository bloodBankRepository; // To handle Blood Bank references
+
+    // Login endpoint
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, String>> loginDonor(@RequestBody Donor loginRequest) {
+        System.out.println("Login request received for userName: " + loginRequest.getUserName());
+        Optional<Donor> donor = donorRepository.findByUserName(loginRequest.getUserName());
+
+        if (donor.isPresent() && donor.get().getPassword().equals(loginRequest.getPassword())) {
+            System.out.println("Login successful for user: " + loginRequest.getUserName());
+
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Login successful!");
+            response.put("redirect", "/profile");
+
+            return ResponseEntity.ok(response);
+        } else {
+            System.out.println("Invalid credentials for user: " + loginRequest.getUserName());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Collections.singletonMap("error", "Invalid username or password."));
+        }
+    }
+
+    // Registration endpoint
+    @PostMapping("/register")
+    public ResponseEntity<String> registerDonor(@RequestBody Donor donorRequest) {
+        System.out.println("Registration request received for userName: " + donorRequest.getUserName());
+
+        if (donorRequest.getUserName() == null || donorRequest.getUserName().trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("Username is required.");
+        }
+
+        if (donorRequest.getPassword() == null || donorRequest.getPassword().trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("Password is required.");
+        }
+
+        if (donorRepository.findByUserName(donorRequest.getUserName()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Username is already taken.");
+        }
+
+        donorRepository.save(donorRequest);
+        return ResponseEntity.ok("Registration successful!");
+    }
+
+    // View profile by username
+    @GetMapping("/profile/{username}")
+    public ResponseEntity<Map<String, Object>> getDonorProfileSummary(@PathVariable String username) {
+        Optional<Donor> donorOpt = donorRepository.findByUserName(username);
+        if (donorOpt.isPresent()) {
+            Donor donor = donorOpt.get();
+            Map<String, Object> profileSummary = new HashMap<>();
+            profileSummary.put("firstname", donor.getFirstname());
+            profileSummary.put("lastname", donor.getLastname());
+            profileSummary.put("phone", donor.getPhone());
+            profileSummary.put("age_or_dob", donor.getAge_or_dob());
+            profileSummary.put("gender", donor.getGender());
+            profileSummary.put("city", donor.getCity());
+            profileSummary.put("donorid", donor.getDonorid());
+            profileSummary.put("bloodgroup", donor.getBloodgroup());
+            profileSummary.put("bloodbankname", donor.getBloodBank() != null ? donor.getBloodBank().getBloodbankname() : null);
+            profileSummary.put("last_donation", donor.getLast_donation());
+            profileSummary.put("scheduled_donation", donor.getScheduled_donation());
+            return ResponseEntity.ok(profileSummary);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    // Update donor information
+    @PutMapping("/update")
+    public ResponseEntity<String> updateDonor(@RequestBody Donor updatedDonor) {
+        System.out.println("Update request received for donor ID: " + updatedDonor.getDonorid());
+        Optional<Donor> donorOpt = donorRepository.findById(updatedDonor.getDonorid());
+        if (donorOpt.isPresent()) {
+            Donor existingDonor = donorOpt.get();
+
+            // Update provided fields
+            existingDonor.setFirstname(updatedDonor.getFirstname());
+            existingDonor.setLastname(updatedDonor.getLastname());
+            existingDonor.setPhone(updatedDonor.getPhone());
+            existingDonor.setAge_or_dob(updatedDonor.getAge_or_dob());
+            existingDonor.setGender(updatedDonor.getGender());
+            existingDonor.setCity(updatedDonor.getCity());
+            existingDonor.setBloodgroup(updatedDonor.getBloodgroup());
+
+            // Handle Blood Bank association
+            if (updatedDonor.getBloodBank() != null && updatedDonor.getBloodBank().getBloodbankname() != null) {
+                Optional<BloodBank> bloodBankOpt = bloodBankRepository.findById(updatedDonor.getBloodBank().getBloodbankname());
+                bloodBankOpt.ifPresent(existingDonor::setBloodBank);
+            } else {
+                existingDonor.setBloodBank(null); // Clear Blood Bank if not provided
+            }
+
+            // Check if a new scheduled donation is set
+            if (updatedDonor.getScheduled_donation() != null) {
+                existingDonor.setLast_donation(existingDonor.getScheduled_donation()); // Move current scheduled date to last donation
+                existingDonor.setScheduled_donation(updatedDonor.getScheduled_donation()); // Set new scheduled date
+            }
+
+            donorRepository.save(existingDonor);
+            System.out.println("Donor updated successfully: " + existingDonor);
+            return ResponseEntity.ok("Donor updated successfully.");
+        } else {
+            System.out.println("Donor not found with ID: " + updatedDonor.getDonorid());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Donor not found.");
+        }
+    }
+
+    // Full profile retrieval
+    @GetMapping("/full-profile/{username}")
+    public ResponseEntity<Donor> getFullProfile(@PathVariable String username) {
+        Optional<Donor> donorOpt = donorRepository.findByUserName(username);
+        if (donorOpt.isPresent()) {
+            return ResponseEntity.ok(donorOpt.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+}

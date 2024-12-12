@@ -1,0 +1,61 @@
+package com.example.login;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/api/bloodstock")
+@CrossOrigin(origins = "http://localhost:3000")
+public class BloodStockController {
+
+    @Autowired
+    private BloodStockRepository bloodStockRepository;
+
+    // Fetch all blood stock records
+    @GetMapping
+    public ResponseEntity<List<BloodStock>> getAllBloodStock() {
+        List<BloodStock> bloodStockList = bloodStockRepository.findAll();
+        if (bloodStockList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return ResponseEntity.ok(bloodStockList);
+    }
+
+    // Fetch a specific blood group stock
+    @GetMapping("/{bloodgroup}")
+    public ResponseEntity<BloodStock> getBloodStock(@PathVariable String bloodgroup) {
+        Optional<BloodStock> bloodStock = bloodStockRepository.findById(bloodgroup);
+        return bloodStock.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+    }
+
+    // Update blood stock (quantity and status)
+    @PutMapping("/update")
+    public ResponseEntity<String> updateBloodStock(@RequestBody BloodStock updatedStock) {
+        Optional<BloodStock> existingStock = bloodStockRepository.findById(updatedStock.getBloodgroup());
+        if (existingStock.isPresent()) {
+            BloodStock stock = existingStock.get();
+            stock.setQuantity(updatedStock.getQuantity());
+            stock.setStatus(updatedStock.getStatus());
+            stock.setBestbefore(updatedStock.getBestbefore());
+            bloodStockRepository.save(stock);
+            return ResponseEntity.ok("Blood stock updated successfully.");
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Blood group not found.");
+    }
+
+    // Add a new blood stock entry
+    @PostMapping("/add")
+    public ResponseEntity<String> addBloodStock(@RequestBody BloodStock newStock) {
+        if (bloodStockRepository.existsById(newStock.getBloodgroup())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Blood group already exists.");
+        }
+        bloodStockRepository.save(newStock);
+        return ResponseEntity.ok("Blood stock added successfully.");
+    }
+}

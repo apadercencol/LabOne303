@@ -1,0 +1,5 @@
+spring.application.name=LogExample
+spring.datasource.url=jdbc:mysql://localhost:3306/logdb
+spring.datasource.username=root
+spring.datasource.password=4paws2ears1tail
+spring.jpa.hibernate.ddl-auto=update

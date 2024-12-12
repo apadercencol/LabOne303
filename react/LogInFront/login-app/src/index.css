@@ -1,0 +1,22 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* index.css */
+body {
+  background: linear-gradient(to bottom right, rgb(154, 227, 154), wheat, white);
+  margin: 0; /* Remove default margins */
+  padding: 0; /* Remove default padding */
+  font-family: Arial, sans-serif; /* Set a default font */
+  min-height: 100vh; /* Ensure the background covers the full height of the viewport */
+}

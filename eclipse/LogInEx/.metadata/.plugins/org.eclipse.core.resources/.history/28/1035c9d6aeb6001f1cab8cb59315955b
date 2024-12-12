@@ -1,0 +1,58 @@
+package com.example.login;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/bloodstock")
+@CrossOrigin(origins = "http://localhost:3000")
+public class BloodStockController {
+
+    @Autowired
+    private BloodStockRepository bloodStockRepository;
+
+    // Get all blood stocks
+    @GetMapping
+    public ResponseEntity<List<BloodStock>> getAllBloodStocks() {
+        List<BloodStock> bloodStocks = bloodStockRepository.findAll();
+        return ResponseEntity.ok(bloodStocks);
+    }
+
+    // Add or update blood stock
+    @PostMapping
+    public ResponseEntity<String> addOrUpdateBloodStock(@RequestBody BloodStock bloodStock) {
+        bloodStockRepository.save(bloodStock);
+        return ResponseEntity.ok("Blood stock updated successfully.");
+    }
+
+    // Increment stock for a specific blood group
+    @PutMapping("/increment/{bloodGroup}")
+    public ResponseEntity<String> incrementStock(@PathVariable String bloodGroup) {
+        BloodStock stock = bloodStockRepository.findById(bloodGroup).orElse(null);
+        if (stock != null) {
+            stock.setQuantity(stock.getQuantity() + 1);
+            bloodStockRepository.save(stock);
+            return ResponseEntity.ok("Stock incremented for blood group: " + bloodGroup);
+        }
+        return ResponseEntity.status(404).body("Blood group not found.");
+    }
+
+    // Decrement stock for a specific blood group
+    @PutMapping("/decrement/{bloodGroup}")
+    public ResponseEntity<String> decrementStock(@PathVariable String bloodGroup) {
+        BloodStock stock = bloodStockRepository.findById(bloodGroup).orElse(null);
+        if (stock != null) {
+            if (stock.getQuantity() > 0) {
+                stock.setQuantity(stock.getQuantity() - 1);
+                bloodStockRepository.save(stock);
+                return ResponseEntity.ok("Stock decremented for blood group: " + bloodGroup);
+            } else {
+                return ResponseEntity.status(400).body("Cannot decrement. Stock is already 0.");
+            }
+        }
+        return ResponseEntity.status(404).body("Blood group not found.");
+    }
+}

@@ -1,0 +1,26 @@
+package com.example.login;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/bloodstock")
+@CrossOrigin(origins = "http://localhost:3000")
+public class BloodStockController {
+
+    @Autowired
+    private BloodStockRepository bloodStockRepository;
+
+    // Endpoint to get all blood stock records
+    @GetMapping
+    public ResponseEntity<List<BloodStock>> getAllBloodStock() {
+        List<BloodStock> bloodStockList = bloodStockRepository.findAll();
+        if (bloodStockList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return ResponseEntity.ok(bloodStockList);
+    }
+}

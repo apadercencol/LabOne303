@@ -1,0 +1,63 @@
+package com.example.login;
+
+import jakarta.persistence.*;
+import java.util.List;
+
+@Entity
+@Table(name = "BloodStock")
+public class BloodStock {
+
+    @Id
+    @Column(name = "bloodgroup")
+    private String bloodgroup; // Primary key
+
+    @Column(nullable = false)
+    private int quantity;
+
+    private String bestbefore;
+    private String status;
+
+    @OneToMany(mappedBy = "bloodStock", cascade = CascadeType.ALL)
+    private List<Donor> donors;
+
+    // Getters and Setters
+    public String getBloodgroup() {
+        return bloodgroup;
+    }
+
+    public void setBloodgroup(String bloodgroup) {
+        this.bloodgroup = bloodgroup;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getBestbefore() {
+        return bestbefore;
+    }
+
+    public void setBestbefore(String bestbefore) {
+        this.bestbefore = bestbefore;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public List<Donor> getDonors() {
+        return donors;
+    }
+
+    public void setDonors(List<Donor> donors) {
+        this.donors = donors;
+    }
+}
